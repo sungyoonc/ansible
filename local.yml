@@ -1,0 +1,49 @@
+---
+- hosts: localhost
+  vars:
+    sshkey: ".ssh/ansible_ed25519"
+    tmp: "{{ playbook_dir }}/tmp"
+  pre_tasks:
+    - name: pre-run | Create tmp directory
+      tags:
+        - install
+        - dotfiles
+      file:
+        path: "{{ tmp }}/.ssh"
+        state: directory
+        mode: 0700
+      changed_when: false
+    - name: pre-run | Temporarily install SSH key to tmp directory
+      tags:
+        - install
+        - dotfiles
+      copy:
+        src: "{{ sshkey }}"
+        dest: "{{ tmp }}/{{ sshkey }}"
+        mode: 0600
+      changed_when: false
+  tasks:
+    - block:
+        - name: placeholder
+          tags: test
+          debug:
+            msg: test
+      rescue:
+        - name: error | Print when errors
+          tags: always
+          debug:
+            msg: Encountered an error!
+      always:
+        - name: cleanup | Check if tmp directory exists
+          tags: always
+          stat:
+            path: "{{ tmp }}"
+          register: tmp_stat
+          changed_when: false
+        - name: cleanup | Remove tmp directory
+          tags: always
+          file:
+            path: "{{ tmp }}"
+            state: absent
+          when: tmp_stat.stat.exists
+          changed_when: false
