@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ansible-playbook --vault-password-file vault-gnupg-client --ask-become-pass local.yml $@
