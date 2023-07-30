@@ -23,11 +23,11 @@ Commands:
 Options to specify a file
      --vault-id FILENAME            Uses specified 'FILENAME.asc' for getting the password. Default is 'default'.
 EOF
-    exit 0
+  exit 0
 }
 
 print_option_error() {
-    cat <<EOF >&2
+  cat <<EOF >&2
 ${name}: invalid option
 Try '${name} --help' for more information.
 EOF
@@ -36,31 +36,31 @@ EOF
 
 read_secret()
 {
-    # Disable echo.
-    stty -echo
+  # Disable echo.
+  stty -echo
 
-    # Set up trap to ensure echo is enabled before exiting if the script
-    # is terminated while echo is disabled.
-    trap 'stty echo' EXIT
+  # Set up trap to ensure echo is enabled before exiting if the script
+  # is terminated while echo is disabled.
+  trap 'stty echo' EXIT
 
-    # Read secret.
-    read "$@"
+  # Read secret.
+  read "$@"
 
-    # Enable echo.
-    stty echo
-    trap - EXIT
+  # Enable echo.
+  stty echo
+  trap - EXIT
 
-    # Print a newline because the newline entered by the user after
-    # entering the passcode is not echoed. This ensures that the
-    # next line of output begins at a new line.
-    echo
+  # Print a newline because the newline entered by the user after
+  # entering the passcode is not echoed. This ensures that the
+  # next line of output begins at a new line.
+  echo
 }
 
 # If GNU getpot is not installed
 getopt -T 2>&1 >/dev/null
 [ $? -eq 4 ] || {
-	echo "$name: GNU getopt is required to run this script" >&2
-	exit 1
+  echo "$name: GNU getopt is required to run this script" >&2
+  exit 1
 }
 
 opts=$(getopt --name "$name" --options hs --longoptions help,set,vault-id: -- "$@")
