@@ -105,7 +105,7 @@ then
 else
   secret=$(gpg --quiet --batch --use-agent --decrypt $vault_id.asc)
   [ $? -eq 0 ] || {
-    echo "$name: Couldn't get the vault password"
+    echo "$name: Couldn't get the vault password" >&2
     exit 2
   }
   echo $secret 
