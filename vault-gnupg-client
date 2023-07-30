@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+# -e Stops the sciprt immidietly when command fails
+# -u Errors if it access undefined variable
+set -u 
+# When errors run handlers (trap 'handler' signal)
+# trap 'echo "$name: Failed at line $LINENO" >&2' ERR
+# Get name of the script
+name=$0
+
+print_usage() {
+	cat <<EOF
+vault-gnupg-cient.sh
+
+This script is used with ansible-vault's --vault-id arg
+to retrieve the vault password via GnuPG
+
+Commands:
+
+ -h, --help                         Prints help information.
+ -s, --set                          Set the password instead of getting it.
+
+Options to specify a file
+     --vault-id FILENAME            Uses specified 'FILENAME.asc' for getting the password. Default is 'default'.
+EOF
+    exit 0
+}
+
+print_option_error() {
+    cat <<EOF >&2
+${name}: invalid option
+Try '${name} --help' for more information.
+EOF
+  exit 1
+}
+
+read_secret()
+{
+    # Disable echo.
+    stty -echo
+
+    # Set up trap to ensure echo is enabled before exiting if the script
+    # is terminated while echo is disabled.
+    trap 'stty echo' EXIT
+
+    # Read secret.
+    read "$@"
+
+    # Enable echo.
+    stty echo
+    trap - EXIT
+
+    # Print a newline because the newline entered by the user after
+    # entering the passcode is not echoed. This ensures that the
+    # next line of output begins at a new line.
+    echo
+}
+
+# If GNU getpot is not installed
+getopt -T 2>&1 >/dev/null
+[ $? -eq 4 ] || {
+	echo "$name: GNU getopt is required to run this script" >&2
+	exit 1
+}
+
+opts=$(getopt --name "$name" --options hs --longoptions help,set,vault-id: -- "$@")
+[ $? -eq 0 ] || {
+  print_option_error
+}
+eval set -- "$opts"
+
+declare vault_id="default" passwd_set=false
+
+while [ $# -gt 0 ]; do
+  case $1 in
+    --vault-id) vault_id=$2; shift 2 ;;
+    -h|--help)  print_usage ;;
+    -s|--set)   passwd_set=true; shift ;;
+    --)         shift; break ;;
+    # Without "set -e" + ERR trap, replace "false" with an error message and exit.
+    * )         echo "$name: Couldn't process arguments" >&2; exit 1 ;;
+  esac
+  shift
+done
+
+if [ $passwd_set == true ]
+then
+  echo "Storing password in '${vault_id}.asc' encrypted with GnuPG"
+  printf "Password: "
+  read_secret new_pw
+  if [ -z $new_pw ]
+  then
+    echo "$name: Password can't be null" >&2
+    exit 1
+  fi
+  printf "Confirm password: "
+  read_secret confirm_pw
+  if [ $new_pw == $confirm_pw ]
+  then
+    echo $new_pw | gpg --encrypt --use-agent --default-recipient-self --armor --output $vault_id.asc
+  else
+    echo "$name: Passwords do not match" >&2
+    exit 1
+  fi
+else
+  secret=$(gpg --quiet --batch --use-agent --decrypt $vault_id.asc)
+  [ $? -eq 0 ] || {
+    echo "$name: Couldn't get the vault password"
+    exit 2
+  }
+  echo $secret 
+fi
+
