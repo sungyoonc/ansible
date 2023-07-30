@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# -e Stops the sciprt immidietly when command fails
+# -e Stops the sciprt immediately when a command fails
 # -u Errors if it access undefined variable
 set -u 
 # When errors run handlers (trap 'handler' signal)
@@ -17,7 +17,7 @@ to retrieve the vault password via GnuPG
 
 Commands:
 
- -h, --help                         Prints help information.
+ -h, --help                         Print help information.
  -s, --set                          Set the password instead of getting it.
 
 Options to specify a file
@@ -56,7 +56,7 @@ read_secret()
   echo
 }
 
-# If GNU getpot is not installed
+# If GNU getopt is not installed
 getopt -T 2>&1 >/dev/null
 [ $? -eq 4 ] || {
   echo "$name: GNU getopt is required to run this script" >&2
