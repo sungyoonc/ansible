@@ -4,22 +4,22 @@
     sshkey: ".ssh/ansible_ed25519"
     tmp: "{{ playbook_dir }}/tmp"
   pre_tasks:
-    - name: pre-run | Create tmp directory
+    - name: pre-run | Create temporary file
       tags:
         - install
         - dotfiles
-      file:
-        path: "{{ tmp }}/.ssh"
-        state: directory
-        mode: 0700
+      tempfile:
+        state: file
+        suffix: temp
+      register: tempfile_ssh
       changed_when: false
     - name: pre-run | Temporarily install SSH key to tmp directory
       tags:
         - install
         - dotfiles
-      copy:
+      ansible.builtin.copy:
         src: "{{ sshkey }}"
-        dest: "{{ tmp }}/{{ sshkey }}"
+        dest: "{{ tempfile_ssh.path }}"
         mode: 0600
       changed_when: false
   tasks:
@@ -37,13 +37,13 @@
         - name: cleanup | Check if tmp directory exists
           tags: always
           stat:
-            path: "{{ tmp }}"
+            path: "{{ tempfile_ssh.path }}"
           register: tmp_stat
           changed_when: false
-        - name: cleanup | Remove tmp directory
+        - name: cleanup | Remove the temporary file
           tags: always
           file:
-            path: "{{ tmp }}"
+            path: "{{ tempfile_ssh.path }}"
             state: absent
           when: tmp_stat.stat.exists
           changed_when: false
