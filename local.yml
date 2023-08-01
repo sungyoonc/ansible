@@ -2,7 +2,6 @@
 - hosts: localhost
   vars:
     sshkey: ".ssh/ansible_ed25519"
-    tmp: "{{ playbook_dir }}/tmp"
   pre_tasks:
     - name: pre-run | Create temporary file
       tempfile:
