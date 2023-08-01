@@ -1,11 +1,11 @@
-- name: Install package stow
+- name: dotfiles | Install package stow
   community.general.pacman:
     name: stow
     state: present
   tags:
     - install
     - dotfiles
-- name: Clone dotfiles repo
+- name: dotfiles | Clone dotfiles repo
   ansible.builtin.git:
     repo: https://github.com/sungyoonc/dotfiles.git
     dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
