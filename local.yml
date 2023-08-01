@@ -5,32 +5,32 @@
     tmp: "{{ playbook_dir }}/tmp"
   pre_tasks:
     - name: pre-run | Create temporary file
-      tags:
-        - install
-        - dotfiles
       tempfile:
         state: file
         suffix: temp
       register: tempfile_ssh
       changed_when: false
-    - name: pre-run | Temporarily install SSH key to tmp directory
       tags:
         - install
         - dotfiles
+    - name: pre-run | Temporarily install SSH key to tmp directory
       ansible.builtin.copy:
         src: "{{ sshkey }}"
         dest: "{{ tempfile_ssh.path }}"
         mode: 0600
       changed_when: false
+      tags:
+        - install
+        - dotfiles
   tasks:
     - block:
         - import_tasks: tasks/dotfiles.yml
       rescue:
         - name: error | Print when errors
-          tags: always
           debug:
             msg: Encountered an error!
           changed_when: false
+          tags: always
       always:
         - name: cleanup | Remove all temporary files
           file:
