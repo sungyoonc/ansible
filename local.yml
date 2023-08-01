@@ -32,16 +32,11 @@
             msg: Encountered an error!
           changed_when: false
       always:
-        - name: cleanup | Check if tmp directory exists
-          tags: always
-          stat:
-            path: "{{ tempfile_ssh.path }}"
-          register: tmp_stat
-          changed_when: false
-        - name: cleanup | Remove the temporary file
-          tags: always
+        - name: cleanup | Remove all temporary files
           file:
-            path: "{{ tempfile_ssh.path }}"
+            path: "{{ item }}"
             state: absent
-          when: tmp_stat.stat.exists
+          with_fileglob:
+          - "/tmp/ansible.*temp"
           changed_when: false
+          tags: always
