@@ -17,3 +17,8 @@
   tags:
     - install
     - dotfiles
+- name: dotfiles | Stow dotfiles
+  shell: cd $HOME/.dotfiles/ && ./install
+  tags:
+    - install
+    - dotfiles
