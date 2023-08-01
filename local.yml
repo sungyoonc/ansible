@@ -24,15 +24,13 @@
       changed_when: false
   tasks:
     - block:
-        - name: placeholder
-          tags: test
-          debug:
-            msg: test
+        - import_tasks: tasks/dotfiles.yml
       rescue:
         - name: error | Print when errors
           tags: always
           debug:
             msg: Encountered an error!
+          changed_when: false
       always:
         - name: cleanup | Check if tmp directory exists
           tags: always
