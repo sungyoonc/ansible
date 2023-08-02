@@ -1,0 +1,17 @@
+- name: zsh | Install package zsh
+  community.general.pacman:
+    name: zsh
+    state: present
+  tags:
+    - install
+    - dotfiles
+    - zsh
+
+- name: zsh | Change default shell to zsh
+  shell:
+    cmd: chsh -s $(which zsh) {{ ansible_user_id }}
+  become: true
+  tags:
+    - install
+    - dotfiles
+    - zsh
