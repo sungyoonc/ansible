@@ -2,6 +2,21 @@
   community.general.pacman:
     name: stow
     state: present
+  become: true
+  tags:
+    - install
+    - dotfiles
+- name: dotfiles | Install dependencies
+  community.general.pacman:
+    name:
+      # neovim
+      - tree-sitter
+      - ripgrep
+      # usb auto detect (sway)
+      - udisks2
+      - udiskie
+    state: present
+  become: true
   tags:
     - install
     - dotfiles
