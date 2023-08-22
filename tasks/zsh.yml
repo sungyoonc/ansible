@@ -7,9 +7,20 @@
     - dotfiles
     - zsh
 
+- name: zsh | Get zsh location
+  shell:
+    cmd: which zsh
+  register: zsh_result
+  changed_when: false
+  tags:
+    - install
+    - dotfiles
+    - zsh
+
 - name: zsh | Change default shell to zsh
   shell:
     cmd: chsh -s $(which zsh) {{ ansible_user_id }}
+  when: zsh_result.stdout != ansible_user_shell
   become: true
   tags:
     - install
