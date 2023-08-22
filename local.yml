@@ -25,6 +25,8 @@
     - block:
         - import_tasks: tasks/dotfiles.yml
         - import_tasks: tasks/zsh.yml
+      tags:
+        - never
       rescue:
         - name: error | Print when errors
           debug:
