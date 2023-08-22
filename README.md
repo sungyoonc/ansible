@@ -9,3 +9,10 @@ $ ansible-galaxy collection install -r requirements.yml
 $ ./run -t <tags>
 ```
 Or you can run it with any other arguments for `ansible-playbook`
+### Available tags
+|Tag|Description|
+|---|---|
+|install|Install packages and setup the desktop|
+|dotfiles|Setup dotfiles|
+|zsh|Install zsh and change the default shell|
+
