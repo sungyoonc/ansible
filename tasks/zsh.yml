@@ -2,6 +2,7 @@
   community.general.pacman:
     name: zsh
     state: present
+  become: true
   tags:
     - install
     - dotfiles
