@@ -1,4 +1,4 @@
-- name: zsh | Install package zsh
+- name: zsh | Install zsh package
   community.general.pacman:
     name: zsh
     state: present

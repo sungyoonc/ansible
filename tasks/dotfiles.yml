@@ -1,4 +1,4 @@
-- name: dotfiles | Install package stow
+- name: dotfiles | Install stow package
   community.general.pacman:
     name: stow
     state: present
