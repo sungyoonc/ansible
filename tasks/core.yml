@@ -1,6 +1,6 @@
 - name: core | Install core packages (util-linux, base-devel, yay, sddm)
   community.general.pacman:
-    name: ['util-linux','base-devel','yay','sddm']
+    name: ['util-linux', 'base-devel', 'yay', 'sddm']
     state: present
   become: true
   tags:

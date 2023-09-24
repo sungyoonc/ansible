@@ -24,13 +24,18 @@
         - install
         - dotfiles
   tasks:
-    - block:
-        - import_tasks: tasks/core.yml
-        - import_tasks: tasks/zsh.yml
-        - import_tasks: tasks/dotfiles.yml
-        - import_tasks: tasks/tools.yml
+    - name: init | Load tasks
       tags:
         - never
+      block:
+        - name: core | Load
+          ansible.builtin.import_tasks: tasks/core.yml
+        - name: zsh | Load
+          ansible.builtin.import_tasks: tasks/zsh.yml
+        - name: dotfiles | Load
+          ansible.builtin.import_tasks: tasks/dotfiles.yml
+        - name: tasks | Load
+          ansible.builtin.import_tasks: tasks/tools.yml
       rescue:
         - name: error | Print when errors
           ansible.builtin.debug:
@@ -43,6 +48,6 @@
             path: "{{ item }}"
             state: absent
           with_fileglob:
-          - "/tmp/ansible.*temp"
+            - "/tmp/ansible.*temp"
           changed_when: false
           tags: always
