@@ -4,7 +4,7 @@
     sshkey: ".ssh/ansible_ed25519"
   pre_tasks:
     - name: pre-run | Create temporary file
-      tempfile:
+      ansible.builtin.tempfile:
         state: file
         suffix: temp
       register: tempfile_ssh
@@ -25,19 +25,21 @@
         - dotfiles
   tasks:
     - block:
-        - import_tasks: tasks/dotfiles.yml
+        - import_tasks: tasks/core.yml
         - import_tasks: tasks/zsh.yml
+        - import_tasks: tasks/dotfiles.yml
+        - import_tasks: tasks/tools.yml
       tags:
         - never
       rescue:
         - name: error | Print when errors
-          debug:
+          ansible.builtin.debug:
             msg: Encountered an error!
           changed_when: false
           tags: always
       always:
         - name: cleanup | Remove all temporary files
-          file:
+          ansible.builtin.file:
             path: "{{ item }}"
             state: absent
           with_fileglob:

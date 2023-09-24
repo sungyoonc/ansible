@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo Installing ansible
+sudo pacman -S ansible-core ansible

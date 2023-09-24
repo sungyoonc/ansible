@@ -1,0 +1,42 @@
+# alacritty firefox neovim gimp flameshot
+- name: tools | Install image editing packages (gimp, krita)
+  community.general.pacman:
+    name: ['gimp','krita']
+    state: present
+  become: true
+  tags:
+    - install
+    - tools
+- name: tools | Install video editing packages (kdenlive)
+  community.general.pacman:
+    name: ['kdenlive']
+    state: present
+  become: true
+  tags:
+    - install
+    - tools
+- name: tools | Install screenshot packages (grimshot)
+  community.general.pacman:
+    name: ['grimshot']
+    state: present
+    executable: yay
+  become: true
+  tags:
+    - install
+    - tools
+- name: tools | Install productivity packages
+  community.general.pacman:
+    name: ['fzf','wl-clipboard','tldr']
+    state: present
+  become: true
+  tags:
+    - install
+    - tools
+- name: tools | Install productivity packages for neovim
+  community.general.pacman:
+    name: ['tree-sitter',ripgrep']
+    state: present
+  become: true
+  tags:
+    - install
+    - tools

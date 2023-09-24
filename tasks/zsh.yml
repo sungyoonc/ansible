@@ -9,7 +9,7 @@
     - zsh
 
 - name: zsh | Get zsh location
-  shell:
+  ansible.builtin.shell:
     cmd: which zsh
   register: zsh_result
   changed_when: false
@@ -19,7 +19,7 @@
     - zsh
 
 - name: zsh | Change default shell to zsh
-  shell:
+  ansible.builtin.shell:
     cmd: chsh -s $(which zsh) {{ ansible_user_id }}
   when: zsh_result.stdout != ansible_user_shell
   become: true

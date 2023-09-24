@@ -1,0 +1,154 @@
+- name: core | Install core packages (util-linux, base-devel, yay, sddm)
+  community.general.pacman:
+    name: ['util-linux','base-devel','yay','sddm']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install wayland packages (xorg-xwayland, qt5-wayland, qt6-wayland)
+  community.general.pacman:
+    name: ['xorg-xwayland', 'qt5-wayland', 'qt6-wayland']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install wayland essentials
+  community.general.pacman:
+    name: ['wl-clipboard']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install IME packages (kime)
+  community.general.pacman:
+    name: ['kime-bin']
+    state: present
+    executable: yay
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install programming packages (c, python, rust, lua)
+  community.general.pacman:
+    name: ['clang', 'python-pip', 'rustup', 'lua51', 'luajit']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
+- name: rust | Check rustup defaults
+  ansible.builtin.command:
+    cmd: "rustup default"
+  register: rustupoutput
+  changed_when: false
+  failed_when: false
+  tags:
+    - install
+    - core
+    - neovim
+    - rust
+- name: rust | Setup rustup to stable
+  ansible.builtin.command:
+    cmd: "rustup default stable"
+  when:
+    - rustupoutput.rc != 0 or 'stable' not in rustupoutput.stdout
+  register: rustupstableoutput
+  changed_when: rustupstableoutput.rc == 0
+  tags:
+    - install
+    - core
+    - neovim
+    - rust
+- name: rust | Install rust-analyzer
+  ansible.builtin.command:
+    cmd: "rustup component add rust-analyzer"
+  register: rustup_ra
+  changed_when: "'up to date' not in rustup_ra.stderr"
+  tags:
+    - install
+    - core
+    - neovim
+    - rust
+- name: rust | Install rustfmt
+  ansible.builtin.command:
+    cmd: "rustup component add rustfmt"
+  register: rustup_rf
+  changed_when: "'up to date' not in rustup_rf.stderr"
+  tags:
+    - install
+    - core
+    - neovim
+    - rust
+- name: core | Install programming packages (java)
+  community.general.pacman:
+    name: ['jdk17-temurin']
+    state: present
+    executable: yay
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
+    - java
+- name: java | Check default java
+  ansible.builtin.command:
+    cmd: "archlinux-java get"
+  register: al_java_default
+  changed_when: false
+  failed_when: false
+  tags:
+    - install
+    - core
+    - neovim
+    - java
+- name: java | Set default java
+  ansible.builtin.command:
+    cmd: "archlinux-java set java-17-temurin" # TODO: change the java name to variable
+  when: "'java-17-temurin' not in al_java_default.stdout"
+  changed_when: true
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
+    - java
+- name: java | Install java packages (gradle)
+  community.general.pacman:
+    name: ['gradle']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
+    - java
+- name: core | Install util packages 1
+  community.general.pacman:
+    name: ['gnupg', 'bluez', 'bluez-utils', 'udisks2', 'udiskie', 'pavucontrol', 'htop', 'curl']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install util packages 2
+  community.general.pacman:
+    name: ['firefox', 'alacritty', 'tmux', 'git']
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+- name: core | Install neovim nightly
+  community.general.pacman: # Have to manually reinstall to update because of limitation of bin aur packages
+    name: 'neovim-nightly-bin'
+    state: present
+    executable: yay
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
