@@ -31,7 +31,7 @@
   tags:
     - install
     - core
-- name: core | Install programming packages (c, python, rust, lua)
+- name: core | Install programming packages (c, python, lua)
   community.general.pacman:
     name: ['clang', 'python-pip', 'rustup', 'lua51', 'luajit']
     state: present
@@ -40,6 +40,16 @@
     - install
     - core
     - neovim
+- name: rust | Install rust programming packages (rustup, gdb)
+  community.general.pacman:
+    name: ['rustup', 'gdb'] # gdb for rust-gdb script
+    state: present
+  become: true
+  tags:
+    - install
+    - core
+    - neovim
+    - rust
 - name: rust | Check rustup defaults
   ansible.builtin.command:
     cmd: "rustup default"
