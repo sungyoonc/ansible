@@ -1,0 +1,101 @@
+- name: theme | Install gtk theme (catppuccin)
+  kewlfft.aur.aur:
+    name:
+      - catppuccin-gtk-theme-frappe
+    state: present
+    use: yay
+    aur_only: true
+  become: false
+  tags:
+    - install
+    - wayland
+    - theme
+
+- name: theme | Create gtk config directory
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.config/gtk-4.0"
+    state: directory
+    mode: '0755'
+  tags:
+    - install
+    - wayland
+    - theme
+
+- name: theme | Apply gtk-4.0 theme
+  ansible.builtin.file:
+    src: '{{ theme_src }}/gtk-4.0/{{ item }}'
+    dest: "{{ lookup('env', 'HOME') }}/.config/gtk-4.0/{{ item }}"
+    state: link
+  with_items:
+    - assets
+    - gtk.css
+    - gtk-dark.css
+  vars:
+    theme_name: Catppuccin-Frappe-Standard-Pink-Dark
+    theme_src: /usr/share/themes/{{ theme_name }}
+  tags:
+    - install
+    - wayland
+    - theme
+
+- name: theme | Create rofi theme directory
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.local/share/rofi"
+    state: directory
+    mode: '0755'
+  tags:
+    - install
+    - wayland
+    - theme
+
+- name: theme | Install rofi theme (catppuccin)
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/catppuccin/rofi/main/basic/.local/share/rofi/themes/{{ item }}
+    dest: "{{ lookup('env', 'HOME') }}/.local/share/rofi/{{ item }}"
+    mode: '0644'
+  with_items:
+    - catppuccin-latte.rasi
+    - catppuccin-frappe.rasi
+    - catppuccin-macchiato.rasi
+    - catppuccin-mocha.rasi
+  tags:
+    - install
+    - wayland
+    - theme
+- name: theme | Change rofi theme font (catppuccin)
+  ansible.builtin.replace:
+    path: "{{ lookup('env', 'HOME') }}/.local/share/rofi/{{ item }}"
+    regexp: '(^.*font: )".*"(;$)'
+    replace: '\1"JerBrainsMono Nerd Font 11"\2'
+  with_items:
+    - catppuccin-latte.rasi
+    - catppuccin-frappe.rasi
+    - catppuccin-macchiato.rasi
+    - catppuccin-mocha.rasi
+  tags:
+    - install
+    - wayland
+    - theme
+
+# These are managed by .dotfiles
+# - spotify-player
+# - hyprland
+# - alacritty
+# - rofi
+# - zsh-fsh
+
+# - name: theme | Install catppuccin (spotify-player)
+#   ansible.builtin.get_url:
+#     url: https://raw.githubusercontent.com/catppuccin/spotify-player/main/src/theme.toml
+#     dest: "{{ lookup('env', 'home') }}/.dotfiles/spotify-player/.config/spotify-player/theme.toml"
+#     mode: '0644'
+# - name: theme | Install catppuccin mocha (hyprland)
+#   ansible.builtin.get_url:
+#     url: https://raw.githubusercontent.com/catppuccin/hyprland/main/themes/mocha.conf
+#     dest: "{{ lookup('env', 'HOME') }}/.dotfiles/hypr/.config/hypr/themes/mocha.conf"
+#     mode: '0644'
+# - name: theme | Install catppuccin frappe (hyprland)
+#   ansible.builtin.get_url:
+#     url: https://raw.githubusercontent.com/catppuccin/hyprland/main/themes/frappe.conf
+#     dest: "{{ lookup('env', 'HOME') }}/.dotfiles/hypr/.config/hypr/themes/frappe.conf"
+#     mode: '0644'

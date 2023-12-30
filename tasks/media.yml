@@ -1,0 +1,10 @@
+- name: media | Install media applications (vlc, spotify-player)
+  kewlfft.aur.aur:
+    name: ['vlc', 'spotify-player']
+    state: present
+    use: yay
+    aur_only: true
+  become: false
+  tags:
+    - install
+    - media

@@ -38,6 +38,10 @@
           ansible.builtin.import_tasks: tasks/tools.yml
         - name: wayland | Load
           ansible.builtin.import_tasks: tasks/wayland.yml
+        - name: theme | Load
+          ansible.builtin.import_tasks: tasks/theme.yml
+        - name: media | Load
+          ansible.builtin.import_tasks: tasks/media.yml
       rescue:
         - name: error | Print when errors
           ansible.builtin.debug:
