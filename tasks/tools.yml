@@ -40,3 +40,11 @@
   tags:
     - install
     - tools
+- name: tools | Install useful tools (lazygit, pavucontorl)
+  community.general.pacman:
+    name: ['lazygit', 'pavucontrol']
+    state: present
+  become: true
+  tags:
+    - install
+    - tools
