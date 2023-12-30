@@ -149,7 +149,7 @@
     - java
 - name: core | Install util packages 1
   community.general.pacman:
-    name: ['gnupg', 'bluez', 'bluez-utils', 'udisks2', 'udiskie', 'pavucontrol', 'htop', 'curl']
+    name: ['gnupg', 'bluez', 'bluez-utils', 'udisks2', 'udiskie', 'pavucontrol', 'htop', 'curl', 'unzip', 'man']
     state: present
   become: true
   tags:
@@ -157,7 +157,7 @@
     - core
 - name: core | Install util packages 2
   community.general.pacman:
-    name: ['firefox', 'alacritty', 'tmux', 'git']
+    name: ['firefox', 'alacritty', 'tmux', 'git', 'npm', 'thunar', 'file-roller']
     state: present
   become: true
   tags:
