@@ -163,12 +163,18 @@
   tags:
     - install
     - core
-- name: core | Install neovim nightly
-  community.general.pacman: # Have to manually reinstall to update because of limitation of bin aur packages
-    name: 'neovim-nightly-bin'
+- name: core | Install bob (neovim)
+  community.general.pacman:
+    name: 'bob'
     state: present
-    executable: yay
   become: true
+  tags:
+    - install
+    - core
+    - neovim
+- name: core | Install neovim nightly
+  ansible.builtin.command:
+    cmd: "bob use nightly"
   tags:
     - install
     - core
