@@ -15,12 +15,13 @@
   tags:
     - install
     - tools
-- name: tools | Install screenshot packages (grimshot)
-  community.general.pacman:
-    name: ['grimshot']
+- name: tools | Install screenshot packages for hyprland (grimblast)
+  kewlfft.aur.aur:
+    name: ['grimblast']
     state: present
-    executable: yay
-  become: true
+    use: yay
+    aur_only: true
+  become: false
   tags:
     - install
     - tools

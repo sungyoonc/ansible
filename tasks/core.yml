@@ -1,6 +1,15 @@
-- name: core | Install core packages (util-linux, base-devel, yay, sddm)
+- name: core | Install yay
+  kewlfft.aur.aur:
+    name: ['yay']
+    state: present
+    use: makepkg
+  become: false
+  tags:
+    - install
+    - core
+- name: core | Install core packages (util-linux, base-devel)
   community.general.pacman:
-    name: ['util-linux', 'base-devel', 'yay', 'sddm']
+    name: ['util-linux', 'base-devel']
     state: present
   become: true
   tags:
@@ -23,11 +32,12 @@
     - install
     - core
 - name: core | Install IME packages (kime)
-  community.general.pacman:
+  kewlfft.aur.aur:
     name: ['kime-bin']
     state: present
-    executable: yay
-  become: true
+    use: yay
+    aur_only: true
+  become: false
   tags:
     - install
     - core
@@ -94,11 +104,12 @@
     - neovim
     - rust
 - name: core | Install programming packages (java)
-  community.general.pacman:
+  kewlfft.aur.aur:
     name: ['jdk17-temurin']
     state: present
-    executable: yay
-  become: true
+    use: yay
+    aur_only: true
+  become: false
   tags:
     - install
     - core
