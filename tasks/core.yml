@@ -179,3 +179,49 @@
     - install
     - core
     - neovim
+- name: core | Setup display manager
+  block:
+    - name: core | Install display manager (lemurs)
+      kewlfft.aur.aur:
+        name: ['lemurs']
+        state: present
+        use: yay
+        aur_only: true
+      become: false
+      tags:
+        - install
+        - core
+    - name: core | Copy lemurs script (hyprland)
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/files/lemurs/hyprland"
+        dest: "/etc/lemurs/wayland/hyprland"
+        owner: root
+        group: root
+        mode: "0755"
+      become: true
+      tags:
+        - install
+        - core
+    - name: core | Disable existing display manager
+      ansible.builtin.systemd_service:
+        name: "display-manager"
+        enabled: false
+      become: true
+      tags:
+        - install
+        - core
+  rescue:
+    - name: core | Error setting up display manager
+      ansible.builtin.debug:
+        msg: No existing display manager!
+      changed_when: false
+      tags: always
+  always:
+    - name: core | Enable display manager (lemurs)
+      ansible.builtin.systemd_service:
+        name: "lemurs"
+        enabled: true
+      become: true
+      tags:
+        - install
+        - core
