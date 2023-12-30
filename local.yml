@@ -17,7 +17,7 @@
       ansible.builtin.copy:
         src: "{{ sshkey }}"
         dest: "{{ tempfile_ssh.path }}"
-        mode: 0600
+        mode: "0600"
       changed_when: false
       tags:
         - never
@@ -34,7 +34,7 @@
           ansible.builtin.import_tasks: tasks/zsh.yml
         - name: dotfiles | Load
           ansible.builtin.import_tasks: tasks/dotfiles.yml
-        - name: tasks | Load
+        - name: tools | Load
           ansible.builtin.import_tasks: tasks/tools.yml
       rescue:
         - name: error | Print when errors

@@ -24,10 +24,10 @@
   ansible.builtin.git:
     repo: git@github.com:sungyoonc/dotfiles.git
     dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
-    recursive: yes
-    update: yes
+    recursive: true
+    update: true
     key_file: "{{ tempfile_ssh.path }}"
-    accept_hostkey: yes
+    accept_hostkey: true
     version: main
   tags:
     - install

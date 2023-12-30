@@ -1,7 +1,6 @@
-# alacritty firefox neovim gimp flameshot
 - name: tools | Install image editing packages (gimp, krita)
   community.general.pacman:
-    name: ['gimp','krita']
+    name: ['gimp', 'krita']
     state: present
   become: true
   tags:
@@ -27,7 +26,7 @@
     - tools
 - name: tools | Install productivity packages
   community.general.pacman:
-    name: ['fzf','wl-clipboard','tldr']
+    name: ['fzf', 'wl-clipboard', 'tldr']
     state: present
   become: true
   tags:
@@ -35,7 +34,7 @@
     - tools
 - name: tools | Install productivity packages for neovim
   community.general.pacman:
-    name: ['tree-sitter',ripgrep']
+    name: ['tree-sitter', 'ripgrep']
     state: present
   become: true
   tags:
