@@ -36,6 +36,8 @@
           ansible.builtin.import_tasks: tasks/dotfiles.yml
         - name: tools | Load
           ansible.builtin.import_tasks: tasks/tools.yml
+        - name: wayland | Load
+          ansible.builtin.import_tasks: tasks/wayland.yml
       rescue:
         - name: error | Print when errors
           ansible.builtin.debug:

@@ -1,0 +1,41 @@
+- name: wayland | Install hyprland desktop portal
+  community.general.pacman:
+    name: ['xdg-desktop-portal-hyprland', 'xdg-desktop-portal-gtk']
+    state: present
+  become: true
+  tags:
+    - install
+    - wayland
+- name: wayland | Install wayland gui tools (waybar, rofi)
+  kewlfft.aur.aur:
+    name: ['waybar', 'rofi-lbonn-wayland']
+    state: present
+    use: yay
+  become: false
+  tags:
+    - install
+    - wayland
+- name: wayland | Install fonts
+  community.general.pacman:
+    name: ['ttf-ubuntu-mono-nerd', 'ttf-jetbrains-mono-nerd', 'ttf-font-awesome']
+    state: present
+  become: true
+  tags:
+    - install
+    - wayland
+- name: wayland | Install wallpaper tool (swaybg)
+  community.general.pacman:
+    name: ['swaybg']
+    state: present
+  become: true
+  tags:
+    - install
+    - wayland
+- name: wayland | Install screen locker (swaylock, swayidle)
+  community.general.pacman:
+    name: ['swaylock', 'swayidle']
+    state: present
+  become: true
+  tags:
+    - install
+    - wayland
